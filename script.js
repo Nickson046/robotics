@@ -23,3 +23,6 @@ let percent = Math.round((checked/total)*100);
 progressText.textContent = "Progress: " + percent + "%";
 
 }
+
+/* run once when page loads */
+updateProgress();
