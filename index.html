@@ -1,34 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Student Semester Portfolio</title>
+
 <link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 </head>
+
 
 <body>
 
-<header>
-<h1>Student Name</h1>
-<p>Web Development – Spring 2026</p>
-</header>
+<!-- Navigation Bar -->
 
-<nav>
-<ul>
+<nav class="navbar">
+
+<div class="nav-container">
+
+<div class="logo">Student Portfolio</div>
+
+<ul class="nav-links">
 <li><a href="#home">Home</a></li>
 <li><a href="#assignments">Assignments</a></li>
 <li><a href="#projects">Projects</a></li>
 <li><a href="#about">About</a></li>
 <li><a href="#contact">Contact</a></li>
 </ul>
+
+</div>
+
 </nav>
 
+
+<!-- Header -->
+
+<header>
+
+<h1>Student Name</h1>
+
+<p>Web Development – Spring 2026</p>
+
+</header>
+
+
+
+<!-- Home Section -->
+
 <section id="home">
+
 <h2>Welcome</h2>
+
 <p>This website contains my coursework and projects for the semester.</p>
 
 <div class="progress-box">
+
 <h3>Semester Progress</h3>
 
 <label><input type="checkbox" class="progress"> Week 1</label>
@@ -39,18 +70,24 @@
 <label><input type="checkbox" class="progress"> Week 6</label>
 
 <p id="progressText">Progress: 0%</p>
+
 </div>
 
 </section>
 
 
+
+<!-- Assignments -->
+
 <section id="assignments">
 
 <h2>Weekly Assignments</h2>
 
+
 <div class="assignment">
 
 <h3>Week 1</h3>
+
 <ul>
 <li><a href="#">HTML Introduction</a></li>
 <li><a href="#">Personal Bio Page</a></li>
@@ -59,9 +96,11 @@
 </div>
 
 
+
 <div class="assignment">
 
 <h3>Week 2</h3>
+
 <ul>
 <li><a href="#">CSS Styling</a></li>
 <li><a href="#">Layout Practice</a></li>
@@ -70,9 +109,11 @@
 </div>
 
 
+
 <div class="assignment">
 
 <h3>Week 3</h3>
+
 <ul>
 <li><a href="#">Forms Assignment</a></li>
 <li><a href="#">Survey Page</a></li>
@@ -83,28 +124,41 @@
 </section>
 
 
+
+<!-- Projects -->
+
 <section id="projects">
 
 <h2>Projects</h2>
 
+
 <div class="project">
 
 <h3>Project 1 – Portfolio Website</h3>
+
 <p>A website showcasing my work.</p>
+
 <a href="#">View Project</a>
 
 </div>
 
+
+
 <div class="project">
 
 <h3>Project 2 – JavaScript Game</h3>
+
 <p>A simple guessing game made with JavaScript.</p>
+
 <a href="#">View Project</a>
 
 </div>
 
 </section>
 
+
+
+<!-- About -->
 
 <section id="about">
 
@@ -119,21 +173,33 @@ using HTML, CSS, and JavaScript.
 </section>
 
 
+
+<!-- Contact -->
+
 <section id="contact">
 
 <h2>Contact</h2>
 
 <p>Email: student@email.com</p>
+
 <p>GitHub: github.com/student</p>
 
 </section>
 
 
+
+<!-- Footer -->
+
 <footer>
+
 <p>© 2026 Student Portfolio</p>
+
 </footer>
+
+
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
