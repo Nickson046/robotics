@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 <meta charset="UTF-8">
-<title>Task 1 – LED Output Control</title>
+<title>Task 3 – User Interaction</title>
 <link rel="stylesheet" href="../styles.css">
 </head>
 
@@ -20,18 +21,18 @@
 
 <section>
 
-<h1>Task 1 – Basic Output Control</h1>
+<h1>Task 3 – User Interaction</h1>
 
 <h2>Objective</h2>
-<p>Create a simple LED control circuit.</p>
+<p>Create a system where a push button controls an LED.</p>
 
 <h2>Circuit Design</h2>
-<img src="../images/task1-circuit.png" width="400">
+<img src="../images/task3-circuit.png" width="400">
 
 <h2>Wokwi Simulation</h2>
 
 <iframe
-src="https://wokwi.com/projects/457499206824872961"
+src="https://wokwi.com/projects/457584714314414081"
 width="100%"
 height="400">
 </iframe>
@@ -39,22 +40,28 @@ height="400">
 <h2>Code</h2>
 
 <pre>
+int button = 2;
 int led = 13;
 
 void setup(){
+ pinMode(button, INPUT);
  pinMode(led, OUTPUT);
 }
 
 void loop(){
- digitalWrite(led, HIGH);
- delay(1000);
- digitalWrite(led, LOW);
- delay(1000);
+
+ if(digitalRead(button) == HIGH){
+   digitalWrite(led, HIGH);
+ }
+ else{
+   digitalWrite(led, LOW);
+ }
+
 }
 </pre>
 
 <h2>Explanation</h2>
-<p>This circuit demonstrates basic digital output control.</p>
+<p>The button acts as a digital input. When pressed, the Arduino receives a HIGH signal and turns on the LED.</p>
 
 </section>
 

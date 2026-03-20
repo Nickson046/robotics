@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 <meta charset="UTF-8">
-<title>Task 1 – LED Output Control</title>
+<title>Task 5 – Motor Control</title>
 <link rel="stylesheet" href="../styles.css">
 </head>
 
@@ -20,18 +21,18 @@
 
 <section>
 
-<h1>Task 1 – Basic Output Control</h1>
+<h1>Task 5 – Motor Control</h1>
 
 <h2>Objective</h2>
-<p>Create a simple LED control circuit.</p>
+<p>Control the speed of a DC motor using PWM.</p>
 
 <h2>Circuit Design</h2>
-<img src="../images/task1-circuit.png" width="400">
+<img src="../images/task5-circuit.png" width="400">
 
 <h2>Wokwi Simulation</h2>
 
 <iframe
-src="https://wokwi.com/projects/457499206824872961"
+src="https://wokwi.com/projects/458995665993626625"
 width="100%"
 height="400">
 </iframe>
@@ -39,24 +40,84 @@ height="400">
 <h2>Code</h2>
 
 <pre>
-int led = 13;
+int led1 = 9;
+int led2 = 10;
+int led3 = 11;
+int button = 2;
 
-void setup(){
- pinMode(led, OUTPUT);
+int speedLevel = 0;
+bool lastState = HIGH;
+
+void setup() {
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+  pinMode(button, INPUT_PULLUP);
 }
 
-void loop(){
- digitalWrite(led, HIGH);
- delay(1000);
- digitalWrite(led, LOW);
- delay(1000);
+void loop() {
+  bool currentState = digitalRead(button);
+
+  if (lastState == HIGH && currentState == LOW) {
+    speedLevel++;
+    if (speedLevel > 3) speedLevel = 0;
+    delay(200);
+  }
+
+  lastState = currentState;
+
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+
+  if (speedLevel == 1) digitalWrite(led1, HIGH);
+
+  if (speedLevel == 2) {
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, HIGH);
+  }
+
+  if (speedLevel == 3) {
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, HIGH);
+  }
 }
 </pre>
 
 <h2>Explanation</h2>
-<p>This circuit demonstrates basic digital output control.</p>
+
+<p>
+In this task, a DC motor is simulated using three LEDs in the Wokwi environment.
+Since a real DC motor is not available, LEDs are used to visually represent
+different motor speed levels.
+</p>
+
+<p>
+A pushbutton connected to pin 2 is used to change the speed level. Each time
+the button is pressed, the system cycles through four states:
+OFF, slow, medium, and high speed.
+</p>
+
+<p>
+Instead of using actual motor rotation, the LEDs indicate speed as follows:
+</p>
+
+<ul>
+<li>0 LEDs ON → Motor OFF</li>
+<li>1 LED ON → Low speed</li>
+<li>2 LEDs ON → Medium speed</li>
+<li>3 LEDs ON → High speed</li>
+</ul>
+
+<p>
+This demonstrates how motor speed can be controlled using different output levels.
+In real applications, this would be done using PWM signals with analogWrite(),
+but in this simulation, multiple LEDs are used to clearly visualize the changes.
+</p>
 
 </section>
 
 </body>
+
 </html>

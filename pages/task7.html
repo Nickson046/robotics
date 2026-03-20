@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 <meta charset="UTF-8">
-<title>Task 1 – LED Output Control</title>
+<title>Task 7 – Distance Sensor</title>
 <link rel="stylesheet" href="../styles.css">
 </head>
 
@@ -20,18 +21,18 @@
 
 <section>
 
-<h1>Task 1 – Basic Output Control</h1>
+<h1>Task 7 – Distance Sensor</h1>
 
 <h2>Objective</h2>
-<p>Create a simple LED control circuit.</p>
+<p>Measure distance using an ultrasonic sensor.</p>
 
 <h2>Circuit Design</h2>
-<img src="../images/task1-circuit.png" width="400">
+<img src="../images/task7-circuit.png" width="400">
 
 <h2>Wokwi Simulation</h2>
 
 <iframe
-src="https://wokwi.com/projects/457499206824872961"
+src="https://wokwi.com/projects/458995912007428097"
 width="100%"
 height="400">
 </iframe>
@@ -39,22 +40,36 @@ height="400">
 <h2>Code</h2>
 
 <pre>
-int led = 13;
+int trig = 9;
+int echo = 10;
 
 void setup(){
- pinMode(led, OUTPUT);
+ pinMode(trig, OUTPUT);
+ pinMode(echo, INPUT);
+ Serial.begin(9600);
 }
 
 void loop(){
- digitalWrite(led, HIGH);
- delay(1000);
- digitalWrite(led, LOW);
- delay(1000);
+
+ digitalWrite(trig, LOW);
+ delayMicroseconds(2);
+
+ digitalWrite(trig, HIGH);
+ delayMicroseconds(10);
+ digitalWrite(trig, LOW);
+
+ long duration = pulseIn(echo, HIGH);
+ int distance = duration * 0.034 / 2;
+
+ Serial.println(distance);
+
+ delay(500);
+
 }
 </pre>
 
 <h2>Explanation</h2>
-<p>This circuit demonstrates basic digital output control.</p>
+<p>The ultrasonic sensor sends sound waves and measures the time taken for the echo to return to calculate distance.</p>
 
 </section>
 
