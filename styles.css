@@ -1,104 +1,490 @@
-body{
-font-family: Arial, sans-serif;
-margin:0;
-background:#f4f6f9;
-color:#333;
+/* =========================
+   Global Styles
+========================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-/* Top info bar */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #eef2f7, #dbeafe);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: rgba(0, 0, 0, 0.35);
+    background-blend-mode: darken;
+    transition: background-image 1.5s ease-in-out;
 
-.top-bar{
-background:#1f2937;
-color:white;
-padding:8px 20px;
-display:flex;
-justify-content:space-between;
-font-size:14px;
+    /* Page load animation */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: pageLoad 0.8s ease forwards;
 }
 
-/* Main navigation */
-
-.main-nav{
-display:flex;
-align-items:center;
-justify-content:space-between;
-background:white;
-padding:10px 30px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
+@keyframes pageLoad {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Logo */
-
-.logo{
-color:#2c3e50;
-margin:0;
+/* =========================
+   Top Info Bar
+========================= */
+.top-bar {
+    background: #111827;
+    color: white;
+    padding: 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
 }
 
-/* Menu */
-
-.nav-menu{
-list-style:none;
-display:flex;
-gap:25px;
-margin:0;
-padding:0;
+/* =========================
+   Navigation
+========================= */
+.main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 12px 30px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.nav-menu a{
-text-decoration:none;
-color:#333;
-font-weight:500;
+.logo {
+    color: #2563eb;
+    font-weight: 600;
 }
 
-.nav-menu a:hover{
-color:#2563eb;
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 25px;
 }
 
-/* Right buttons */
-
-.nav-right button{
-margin-left:10px;
-padding:8px 16px;
-border:none;
-border-radius:20px;
-cursor:pointer;
+.nav-menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: 0.3s;
 }
 
-.login{
-background:#e5e7eb;
+.nav-menu a:hover {
+    color: #2563eb;
 }
 
-.signup{
-background:#16a34a;
-color:white;
+/* =========================
+   Header
+========================= */
+header {
+    text-align: center;
+    padding: 30px 15px;
+    background: linear-gradient(120deg, #2563eb, #1e3a8a);
+    color: white;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* subtle depth */
 }
 
-/* Sections */
-
-section{
-padding:40px;
-max-width:900px;
-margin:40px auto;
-background:white;
-border-radius:8px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
+header h1 {
+    font-size: 30px;
+    margin-bottom: 6px;
+    font-weight: 800; 
 }
 
-/* Cards */
-
-.assignment, .project{
-background:#f9fafb;
-padding:20px;
-margin-bottom:20px;
-border-radius:8px;
+header p {
+    font-size: 16px;
+    opacity: 0.85;
+    margin-top: 4px;
 }
 
-/* Footer */
+header {
+    border: 2px solid rgba(255,255,255,0.15); /* soft outline */
+    /*backdrop-filter: blur(5px); /* glassy effect if you have a background image */
+}
 
-footer{
-text-align:center;
-padding:20px;
-background:#2c3e50;
-color:white;
-margin-top:40px;
+/* =========================
+   Sections (General)
+========================= */
+section {
+    padding: 40px;
+    max-width: 950px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================
+   Progress Box / Home Section
+========================= */
+.progress-bg {
+    background-image: url("images/roboticsgif1.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 0; 
+    box-shadow: none; 
+    position: relative;
+    padding: 40px 20px;
+    margin: 20px auto;
+    overflow: hidden;
+    max-width: 950px;
+}
+
+/* Overlay for readability */
+.progress-bg::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.35);
+    border-radius: 0;
+    z-index: 0;
+}
+
+/* Make content above overlay */
+.progress-bg > * {
+    position: relative;
+    z-index: 1;
+    color: white; 
+}
+
+/* Progress checkboxes */
+.progress-box {
+    background: transparent; 
+    padding: 20px;
+    border-radius: 0;
+}
+
+.progress-box label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+#progressText {
+    margin-top: 15px;
+    font-weight: 600;
+    color: white;
+}
+
+/* =========================
+   Assignments Section
+========================= */
+#assignments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    background: none;      
+    max-width: none;       
+    margin: 0;             
+    padding: 20px 10px;    
+    box-shadow: none;
+}
+
+.assignment-card {
+    flex: 0 1 250px;
+    display: block;
+    padding: 40px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.assignment-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.assignment-card h3 {
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+.task-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    transition: transform 0.4s ease;
+}
+
+.assignment-card:hover .task-image {
+    transform: scale(1.05);
+}
+
+.task1 { background-image: url("images/task1.jpg"); }
+.task2 { background-image: url("images/task2.jpg"); }
+.task3 { background-image: url("images/task3.jpg"); }
+.task4 { background-image: url("images/task4.jpg"); }
+.task5 { background-image: url("images/task5.jpg"); }
+.task6 { background-image: url("images/task6.jpg"); }
+.task7 { background-image: url("images/task7.jpg"); }
+.task8 { background-image: url("images/task8.jpg"); }
+
+/* =========================
+   About Me Section
+========================= */
+#about {
+    background: rgba(0,0,0,0.2);
+    border-left: 5px solid #2563eb;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 950px;
+    margin: 40px auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#about:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+#about h2, #about p {
+    color: white;
+}
+
+/* =========================
+   Projects Section (Overlay Style)
+========================= */
+.project-bg {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 950px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border-left: 5px solid #2563eb; /* subtle accent border */
+}
+
+/* Overlay for readability */
+.project-bg::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.35);
+    border-radius: 12px;
+    z-index: 0;
+}
+
+/* Project content above overlay */
+.project-bg > .project {
+    position: relative;
+    z-index: 1;
+    padding: 25px 20px;
+    color: white;
+}
+
+/* Hover lift effect */
+.project-bg:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* Project titles & description */
+.project-bg > .project h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.project-bg > .project p {
+    font-size: 16px;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* Example project background images */
+.project-bg:nth-child(2) { background-image: url("images/myprojects.jpg"); }
+.project-bg:nth-child(3) { background-image: url("images/project2.jpg"); }
+
+/* =========================
+   Contact Section (Overlay Style)
+========================= */
+.contact-bg {
+    background-image: url("images/contactme.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 25px 20px;
+    max-width: 400px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Overlay for readability */
+.contact-bg::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.35);
+    border-radius: 12px;
+    z-index: 0;
+}
+
+/* Contact content above overlay */
+.contact-bg > * {
+    position: relative;
+    z-index: 1;
+    color: white;
+}
+
+/* Hover effect for Contact */
+.contact-bg:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   Images
+========================= */
+img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* =========================
+   Code Blocks
+========================= */
+pre {
+    background: #111827;
+    color: #e5e7eb;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-top: 10px;
+}
+
+/* =========================
+   Iframe
+========================= */
+iframe {
+    border: none;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+/* =========================
+   Footer
+========================= */
+footer {
+    text-align: center;
+    padding: 25px;
+    background: #1f2937;
+    color: white;
+    margin-top: 40px;
+}
+
+/* =========================
+   Smooth Scroll
+========================= */
+html {
+    scroll-behavior: smooth;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 768px) {
+
+    .nav-menu {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    header h1 {
+        font-size: 28px;
+    }
+
+    section {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    #assignments {
+        justify-content: center;
+    }
+}
+
+/* =========================
+   Hamburger Menu
+========================= */
+.hamburger {
+    display: none; 
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 18px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: #2563eb;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        gap: 15px;
+        background: white;
+        position: absolute;
+        top: 60px; 
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        z-index: 100;
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
 }

@@ -4,34 +4,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Student Semester Portfolio</title>
+<title>Nickson Mugerwa – Robotics Portfolio</title>
 
 <link rel="stylesheet" href="styles.css">
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
 
-<!-- Top Info Bar -->
-
 <div class="top-bar">
-<!--<span>📞 +1 222 467 513</span>-->
 <span>✉ nickson.mugerwa@outlook.com</span>
-<span class="welcome">Welcome to My Robotics page</span>
+<span class="welcome">Welcome to My Robotics Page</span>
 </div>
-
-
-<!-- Main Navigation Bar -->
 
 <nav class="main-nav">
 
 <div class="nav-left">
-<h2 class="logo">Robotics page</h2>
+<h2 class="logo">Robotics Portfolio</h2>
 </div>
 
+  <!-- Hamburger button -->
+<button class="hamburger" aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span>
+ </button>
 <ul class="nav-menu">
 <li><a href="#home">Home</a></li>
 <li><a href="#assignments">Assignments</a></li>
@@ -40,284 +37,150 @@
 <li><a href="#contact">Contact</a></li>
 </ul>
 
-<div class="nav-right">
-<button class="login">Login</button>
-<button class="signup">Sign Up</button>
-</div>
-
 </nav>
 
-
-<!-- Header -->
-
 <header>
-
-<h1>Nickson Mugerwa</h1>
-<p>Robotics – Spring 2026</p>
-
+<header>
+  <h1>Nickson Mugerwa</h1>
+  <p>Robotics Portfolio – Spring 2026</p>
+</header>
 </header>
 
-
-
-<!-- Home Section -->
-
 <section id="home">
-
+<div class = "progress-bg">
 <h2>Welcome</h2>
-
-<p>This website contains my coursework and projects for the semester.</p>
+<p>This website contains my coursework and robotics projects for the semester.</p>
 
 <div class="progress-box">
 
 <h3>Semester Progress</h3>
 
-<label><input type="checkbox" class="progress id = "week1""> Task 1</label>
-<label><input type="checkbox" class="progress"id = "week2"> Task 2</label>
-<label><input type="checkbox" class="progress" id = "week3"> Task 3</label>
-<label><input type="checkbox" class="progress" id = "week4"> Task 4</label>
-<label><input type="checkbox" class="progress" id = "week5"> Task 5</label>
-<label><input type="checkbox" class="progress" id = "week6"> Task 6</label>
-<label><input type="checkbox" class="progress" id ="week7"> Task 7</label>
-<label><input type="checkbox" class="progress" id = "week8"> Task 8</label>
-  
+<label><input type="checkbox" class="progress" id="week1"> Task 1</label>
+<label><input type="checkbox" class="progress" id="week2"> Task 2</label>
+<label><input type="checkbox" class="progress" id="week3"> Task 3</label>
+<label><input type="checkbox" class="progress" id="week4"> Task 4</label>
+<label><input type="checkbox" class="progress" id="week5"> Task 5</label>
+<label><input type="checkbox" class="progress" id="week6"> Task 6</label>
+<label><input type="checkbox" class="progress" id="week7"> Task 7</label>
+<label><input type="checkbox" class="progress" id="week8"> Task 8</label>
+
 <p id="progressText">Progress: 0%</p>
 
 </div>
-
+</div>
 </section>
 
-
-
-<!-- Assignments -->
 
 <section id="assignments">
 
 <h2>Course Tasks</h2>
 
-<div class="assignment">
-
+<a href="pages/task1.html" class="assignment-card">
+<img src="images/task1.jpg" class="task-image">
 <h3>🧩 Task 1: Basic Output Control</h3>
+<p>LED indicator system</p>
+</a>
 
-<p>
-Design a simple system that controls an output device such as an LED indicator or warning light.
-Think about where such systems are used in real life.
-</p>
-
-<ul>
-<li>Example: LED control system</li>
-<li>Example: Indicator light</li>
-<li>Example: Warning signal system</li>
-</ul>
-
-</div>
-
-
-
-<div class="assignment">
-
+<a href="pages/task2.html" class="assignment-card">
+<img src="images/task2.jpg" class="task-image">
 <h3>🧩 Task 2: Variable Control System</h3>
+<p>Brightness or speed control</p>
+</a>
 
-<p>
-Design a system where the output behavior changes gradually or dynamically.
-</p>
+<a href="pages/task3.html" class="assignment-card">
+<img src="images/task3.jpg" class="task-image">
+<h3>🧩 Task 3: User Interaction</h3>
+<p>Button controlled system</p>
+</a>
 
-<ul>
-<li>Brightness control</li>
-<li>Speed control</li>
-<li>Intensity variation</li>
-<li>Real-life use: Smart lighting or automation</li>
-</ul>
+<a href="pages/task4.html" class="assignment-card">
+<img src="images/task4.jpg" class="task-image">
+<h3>🧩 Task 4: Alert System</h3>
+<p>Buzzer or alarm system</p>
+</a>
 
-</div>
+<a href="pages/task5.html" class="assignment-card">
+<img src="images/task5.jpg" class="task-image">
+<h3>🧩 Task 5: Display System</h3>
+<p>LCD or OLED display</p>
+</a>
 
+<a href="pages/task6.html" class="assignment-card">
+<img src="images/task6.jpg" class="task-image">
+<h3>🧩 Task 6: Environmental Sensor</h3>
+<p>Light or obstacle detection</p>
+</a>
 
-
-<div class="assignment">
-
-<h3>🧩 Task 3: User Interaction System</h3>
-
-<p>
-Design a system that responds to user input and interaction.
-</p>
-
-<ul>
-<li>Button-based control</li>
-<li>Switch-based logic</li>
-<li>Manual override systems</li>
-<li>Human-machine interaction</li>
-</ul>
-
-</div>
-
-
-
-<div class="assignment">
-
-<h3>🧩 Task 4: Alert or Notification System</h3>
-
-<p>
-Design a system that provides sound or alert-based feedback.
-</p>
-
-<ul>
-<li>Buzzer alerts</li>
-<li>Warning sounds</li>
-<li>Notification signals</li>
-<li>Safety systems or alarms</li>
-</ul>
-
-</div>
-
-
-
-<div class="assignment">
-
-<h3>🧩 Task 5: Display or Information System</h3>
-
-<p>
-Design a system that displays information to the user.
-</p>
-
-<ul>
-<li>Text display</li>
-<li>Sensor value display</li>
-<li>System status indicators</li>
-<li>Monitoring dashboards</li>
-</ul>
-
-</div>
-
-
-
-<div class="assignment">
-
-<h3>🧩 Task 6: Environmental Sensing System</h3>
-
-<p>
-Design a system that senses environmental conditions.
-</p>
-
-<ul>
-<li>Light detection</li>
-<li>Object detection</li>
-<li>Environmental awareness</li>
-<li>Smart city or energy-saving systems</li>
-</ul>
-
-</div>
-
-
-
-<div class="assignment">
-
+<a href="pages/task7.html" class="assignment-card">
+<img src="images/task7.jpg" class="task-image">
 <h3>🧩 Task 7: Monitoring System</h3>
+<p>Temperature / humidity monitor</p>
+</a>
 
-<p>
-Design a system that monitors physical or environmental parameters.
-</p>
-
-<ul>
-<li>Temperature monitoring</li>
-<li>Humidity monitoring</li>
-<li>Comfort monitoring</li>
-<li>Applications: smart homes, agriculture, health</li>
-</ul>
-
-</div>
-
-
-
-<div class="assignment">
-
-<h3>🧩 Task 8: Motion or Actuation System</h3>
-
-<p>
-Design a system involving movement or mechanical action.
-</p>
-
-<ul>
-<li>Motor control</li>
-<li>Angle control</li>
-<li>Positioning system</li>
-<li>Applications: robotics and automation</li>
-</ul>
-
-</div>
+<a href="pages/task8.html" class="assignment-card">
+<img src="images/task8.jpg" class="task-image">
+<h3>🧩 Task 8: Motion System</h3>
+<p>Servo or motor control</p>
+</a>
 
 </section>
 
-
-<!-- Projects -->
-
+<div class = "project-bg">
 <section id="projects">
 
 <h2>Projects</h2>
 
+<!--<div class = "project-bg">-->
 <div class="project">
-
-<h3>Project 1 – Portfolio Website</h3>
-
-<p>A website showcasing my work.</p>
-
-<a href="#">View Project</a>
-
+<h3>Portfolio Website</h3>
+<p>This robotics portfolio website.</p>
+<!--</div>-->
 </div>
 
-
+<!--<div class="project-bg">-->
 <div class="project">
-
-<h3>Project 2 – JavaScript Game</h3>
-
-<p>A simple guessing game made with JavaScript.</p>
-
-<a href="#">View Project</a>
-
+<h3>JavaScript Game</h3>
+<p>A simple guessing game.</p>
+</div>
 </div>
 
 </section>
 
-
-
-<!-- About -->
 
 <section id="about">
-
 <h2>About Me</h2>
-
-<p>
-Hello! My name is Nickson.
-This is my robotics assignment page.
-</p>
-
+<p>Hello! My name is Nickson. This site documents my robotics learning journey.</p>
 </section>
 
-
-
-<!-- Contact -->
-
+<div class = "project-bg">
 <section id="contact">
-
 <h2>Contact</h2>
-
+<div class="contact-bg">
 <p>Email: nickson.mugerwa@outlook.com</p>
 <p>GitHub: github.com/student</p>
-
+</div class>
 </section>
+</div>
 
-
-
-<!-- Footer -->
 
 <footer>
-
-<p>© 2026 Student Portfolio</p>
-
+<p>© 2026 Nickson Mugerwa Robotics Portfolio</p>
 </footer>
-
-
 
 <script src="script.js"></script>
 
-</body>
+<!--Script for the header-->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const slidesContainer = document.querySelector('.slides');
+  const totalSlides = document.querySelectorAll('.slide').length;
+  let index = 0;
 
+  setInterval(() => {
+    index = (index + 1) % totalSlides;
+    slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+  }, 10000);
+});
+</script>
+</body>
 </html>
