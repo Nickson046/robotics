@@ -1,64 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task 1 – LED Output Control</title>
-<link rel="stylesheet" href="../styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 1 – Smart Parking Indicator | Nickson Mugerwa</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<nav class="main-nav">
-<h2 class="logo">Robotics Portfolio</h2>
+<canvas id="particles"></canvas>
 
-<ul class="nav-menu">
-<li><a href="../index.html">Home</a></li>
-</ul>
-
+<nav class="page-nav">
+  <span class="nav-logo">NM<span class="dot">.</span></span>
+  <a href="../index.html" class="back-link">← Back to Portfolio</a>
 </nav>
 
-<section>
+<div class="page-hero">
+  <div class="page-tag">Task 01 · Basic Output Control</div>
+  <h1>Smart Parking<br>Indicator System</h1>
+  <p>3 ultrasonic sensors detect cars — 6 LEDs show which spaces are free or occupied.</p>
+</div>
 
-<h1>Task 1 – Basic Output Control</h1>
+<div class="page-body">
 
-<h2>Objective</h2>
-<p>Create a simple LED control circuit.</p>
+  <div class="content-block">
+    <h2>Objective</h2>
+    <p>Build a smart parking indicator using HC-SR04 ultrasonic sensors and LEDs to show whether parking spaces are available (green) or occupied (red). This simulates the LED indicator systems used in shopping malls, airports, and smart parking garages.</p>
+  </div>
 
-<h2>Circuit Design</h2>
-<img src="../images/task1-circuit.png" width="400">
+  <div class="content-block">
+    <h2>Components Used</h2>
+    <ul>
+      <li>Arduino Uno</li>
+      <li>3 × HC-SR04 Ultrasonic Sensors</li>
+      <li>3 × Green LEDs (space free)</li>
+      <li>3 × Red LEDs (space occupied)</li>
+      <li>6 × 220Ω Resistors</li>
+      <li>Breadboard + Jumper Wires</li>
+    </ul>
+  </div>
 
-<h2>Wokwi Simulation</h2>
+  <div class="content-block">
+    <h2>Wokwi Simulation</h2>
+    <div class="sim-wrapper">
+      <iframe src="https://wokwi.com/projects/457499206824872961" loading="lazy"></iframe>
+    </div>
+  </div>
 
-<iframe
-src="https://wokwi.com/projects/457499206824872961"
-width="100%"
-height="400">
-</iframe>
+  <div class="content-block">
+    <h2>Circuit Design</h2>
+    <img src="../images/task1.jpg" alt="Task 1 circuit">
+  </div>
 
-<h2>Code</h2>
+  <div class="content-block">
+    <h2>Code</h2>
+    <pre>
+// Smart Parking Indicator System
+const int TRIG1 = 2, ECHO1 = 3;
+const int TRIG2 = 4, ECHO2 = 5;
+const int TRIG3 = 6, ECHO3 = 7;
 
-<pre>
-int led = 13;
+const int GREEN1 = 8,  RED1 = 9;
+const int GREEN2 = 10, RED2 = 11;
+const int GREEN3 = 12, RED3 = 13;
 
-void setup(){
- pinMode(led, OUTPUT);
+const int THRESHOLD = 10;
+
+long getDistance(int trigPin, int echoPin) {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  long duration = pulseIn(echoPin, HIGH, 30000);
+  if (duration == 0) return 999;
+  return duration * 0.034 / 2;
 }
 
-void loop(){
- digitalWrite(led, HIGH);
- delay(1000);
- digitalWrite(led, LOW);
- delay(1000);
+void updateSpot(long dist, int greenPin, int redPin, int spotNum) {
+  if (dist < THRESHOLD) {
+    digitalWrite(greenPin, LOW);
+    digitalWrite(redPin, HIGH);
+  } else {
+    digitalWrite(greenPin, HIGH);
+    digitalWrite(redPin, LOW);
+  }
 }
-</pre>
 
-<h2>Explanation</h2>
-<p>This circuit demonstrates basic digital output control.</p>
+void setup() {
+  Serial.begin(9600);
+  pinMode(TRIG1, OUTPUT); pinMode(ECHO1, INPUT);
+  pinMode(TRIG2, OUTPUT); pinMode(ECHO2, INPUT);
+  pinMode(TRIG3, OUTPUT); pinMode(ECHO3, INPUT);
+  pinMode(GREEN1, OUTPUT); pinMode(RED1, OUTPUT);
+  pinMode(GREEN2, OUTPUT); pinMode(RED2, OUTPUT);
+  pinMode(GREEN3, OUTPUT); pinMode(RED3, OUTPUT);
+}
 
-</section>
+void loop() {
+  long d1 = getDistance(TRIG1, ECHO1);
+  long d2 = getDistance(TRIG2, ECHO2);
+  long d3 = getDistance(TRIG3, ECHO3);
+  updateSpot(d1, GREEN1, RED1, 1);
+  updateSpot(d2, GREEN2, RED2, 2);
+  updateSpot(d3, GREEN3, RED3, 3);
+  delay(500);
+}
+    </pre>
+  </div>
 
+  <div class="content-block">
+    <h2>How It Works</h2>
+    <p>Each HC-SR04 sensor sends an ultrasonic pulse and measures how long it takes to bounce back. If an object (car) is detected within 10cm, the space is marked as occupied (red LED). Otherwise the green LED shows the space is free. The system updates every 500ms, simulating a real parking garage display.</p>
+  </div>
+
+</div>
+
+<script src="../script.js"></script>
 </body>
 </html>

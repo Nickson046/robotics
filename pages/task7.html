@@ -1,78 +1,130 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task 7 – Distance Sensor</title>
-<link rel="stylesheet" href="../styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 7 – Smart Patient Monitor | Nickson Mugerwa</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<nav class="main-nav">
-<h2 class="logo">Robotics Portfolio</h2>
+<canvas id="particles"></canvas>
 
-<ul class="nav-menu">
-<li><a href="../index.html">Home</a></li>
-</ul>
-
+<nav class="page-nav">
+  <span class="nav-logo">NM<span class="dot">.</span></span>
+  <a href="../index.html" class="back-link">← Back to Portfolio</a>
 </nav>
 
-<section>
+<div class="page-hero">
+  <div class="page-tag">Task 07 · Monitoring System</div>
+  <h1>Smart Patient<br>Monitoring System</h1>
+  <p>Monitors heart rate, SpO2, body temperature and room environment — triggers alarms when vitals go critical.</p>
+</div>
 
-<h1>Task 7 – Distance Sensor</h1>
+<div class="page-body">
 
-<h2>Objective</h2>
-<p>Measure distance using an ultrasonic sensor.</p>
+  <div class="content-block">
+    <h2>Objective</h2>
+    <p>Build a hospital-grade patient monitoring system that tracks multiple vital signs simultaneously. Three potentiometers simulate heart rate, blood oxygen (SpO2), and body temperature. Two DHT22 sensors monitor patient and room environment. The system provides status LEDs, categorised alarms, a rotating 4-screen LCD, and a serial monitor vitals dashboard.</p>
+  </div>
 
-<h2>Circuit Design</h2>
-<img src="../images/task7-circuit.png" width="400">
+  <div class="content-block">
+    <h2>Components Used</h2>
+    <ul>
+      <li>Arduino Uno</li>
+      <li>2 × DHT22 Temperature + Humidity Sensors</li>
+      <li>3 × Potentiometers (heart rate / SpO2 / body temp)</li>
+      <li>16×2 LCD with I2C</li>
+      <li>Piezo Buzzer</li>
+      <li>Green, Yellow, Red, Blue LEDs</li>
+      <li>Reset Push Button</li>
+      <li>4 × 220Ω + 2 × 10kΩ Resistors</li>
+      <li>Breadboard + Jumper Wires</li>
+    </ul>
+  </div>
 
-<h2>Wokwi Simulation</h2>
+  <div class="content-block">
+    <h2>Vital Sign Ranges</h2>
+    <ul>
+      <li>Heart rate: Normal 60–100 bpm / Warning 50–59 or 101–120 / Critical &lt;50 or &gt;120</li>
+      <li>SpO2: Normal 95–100% / Warning 90–94% / Critical &lt;90%</li>
+      <li>Body temp: Normal 36–37.5°C / Warning 37.5–39°C / Critical &gt;39°C or &lt;35°C</li>
+    </ul>
+  </div>
 
-<iframe
-src="https://wokwi.com/projects/458995912007428097"
-width="100%"
-height="400">
-</iframe>
+  <div class="content-block">
+    <h2>LCD Screens (rotate every 4 seconds)</h2>
+    <ul>
+      <li>Screen 1 — Heart rate + SpO2 with status</li>
+      <li>Screen 2 — Body temperature + overall status</li>
+      <li>Screen 3 — Room temperature + humidity</li>
+      <li>Screen 4 — All vitals summary at a glance</li>
+    </ul>
+  </div>
 
-<h2>Code</h2>
+  <div class="content-block">
+    <h2>Wokwi Simulation</h2>
+    <div class="sim-wrapper">
+      <iframe src="https://wokwi.com/projects/458995665993626625" loading="lazy"></iframe>
+    </div>
+  </div>
 
-<pre>
-int trig = 9;
-int echo = 10;
+  <div class="content-block">
+    <h2>Code (key loop logic)</h2>
+    <pre>
+void loop() {
+  unsigned long now = millis();
 
-void setup(){
- pinMode(trig, OUTPUT);
- pinMode(echo, INPUT);
- Serial.begin(9600);
+  // Read vitals from potentiometers
+  bpm   = map(analogRead(POT_HR),   0, 1023, 30,  170);
+  spo2  = map(analogRead(POT_SPO2), 0, 1023, 78,  100);
+  btemp = map(analogRead(POT_TEMP), 0, 1023, 330, 420) / 10.0;
+
+  // Read room DHT22
+  float h = dhtRoom.readHumidity();
+  float t = dhtRoom.readTemperature();
+  if (!isnan(h)) rhumid = h;
+  if (!isnan(t)) rtemp  = t;
+
+  // Check for critical and trigger emergency lockout
+  if (overall() == 2 && !alarmActive) {
+    alarmActive = true;
+    Serial.println("!!! CRITICAL ALERT TRIGGERED !!!");
+  }
+
+  // Reset button clears alarm
+  if (digitalRead(RESET_BTN) == LOW && alarmActive) {
+    alarmActive = false;
+    noTone(BUZZER);
+  }
+
+  // Update LEDs, buzzer, LCD, serial
+  updateLEDs();
+  updateBuzzer(now);
+  if (now - lastScreen &gt;= 3000) {
+    lcd.clear();
+    screen = (screen + 1) % 4;
+    lastScreen = now;
+  }
+  switch (screen) {
+    case 0: showScreen0(); break;
+    case 1: showScreen1(); break;
+    case 2: showScreen2(); break;
+    case 3: showScreen3(); break;
+  }
+  delay(200);
 }
+    </pre>
+  </div>
 
-void loop(){
+  <div class="content-block">
+    <h2>How to Test</h2>
+    <p>Scroll POT1 down to simulate bradycardia (30 bpm) — red LED lights and rapid alarm triggers. Scroll POT2 down for hypoxia (80% SpO2) — blue LED activates. Scroll POT3 up for high fever (41°C). Once a critical alarm locks, press the green reset button to acknowledge and clear it. The Serial Monitor prints a full vitals table every 2 seconds.</p>
+  </div>
 
- digitalWrite(trig, LOW);
- delayMicroseconds(2);
+</div>
 
- digitalWrite(trig, HIGH);
- delayMicroseconds(10);
- digitalWrite(trig, LOW);
-
- long duration = pulseIn(echo, HIGH);
- int distance = duration * 0.034 / 2;
-
- Serial.println(distance);
-
- delay(500);
-
-}
-</pre>
-
-<h2>Explanation</h2>
-<p>The ultrasonic sensor sends sound waves and measures the time taken for the echo to return to calculate distance.</p>
-
-</section>
-
+<script src="../script.js"></script>
 </body>
 </html>

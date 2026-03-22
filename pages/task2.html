@@ -1,67 +1,125 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task 2 – Variable Control System</title>
-<link rel="stylesheet" href="../styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 2 – Smart Street Light | Nickson Mugerwa</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<nav class="main-nav">
-<h2 class="logo">Robotics Portfolio</h2>
+<canvas id="particles"></canvas>
 
-<ul class="nav-menu">
-<li><a href="../index.html">Home</a></li>
-</ul>
-
+<nav class="page-nav">
+  <span class="nav-logo">NM<span class="dot">.</span></span>
+  <a href="../index.html" class="back-link">← Back to Portfolio</a>
 </nav>
 
-<section>
+<div class="page-hero">
+  <div class="page-tag">Task 02 · Variable Control System</div>
+  <h1>Smart Street Light<br>Brightness Control</h1>
+  <p>Street lights automatically adjust brightness based on ambient light detected by an LDR sensor.</p>
+</div>
 
-<h1>Task 2 – Variable Control System</h1>
+<div class="page-body">
 
-<h2>Objective</h2>
-<p>Control LED brightness using a potentiometer.</p>
+  <div class="content-block">
+    <h2>Objective</h2>
+    <p>Create a smart street lighting system that automatically adjusts LED brightness based on the environment's light level. A potentiometer allows threshold adjustment, and an override button forces lights on regardless of the sensor reading — simulating real-world smart city lighting.</p>
+  </div>
 
-<h2>Circuit Design</h2>
-<img src="../images/task2-circuit.png" width="400">
+  <div class="content-block">
+    <h2>Components Used</h2>
+    <ul>
+      <li>Arduino Uno</li>
+      <li>Photoresistor (LDR)</li>
+      <li>Potentiometer — threshold adjustment</li>
+      <li>Push button — manual override</li>
+      <li>6 × Yellow LEDs (street lights)</li>
+      <li>6 × 220Ω Resistors + 10kΩ pull-down</li>
+      <li>Breadboard + Jumper Wires</li>
+    </ul>
+  </div>
 
-<h2>Wokwi Simulation</h2>
+  <div class="content-block">
+    <h2>Brightness Modes</h2>
+    <ul>
+      <li>Bright environment → all LEDs OFF (energy saving)</li>
+      <li>Twilight zone → LEDs at 30% brightness (DIM mode)</li>
+      <li>Full darkness → LEDs at 100% brightness (FULL mode)</li>
+      <li>Override button pressed → forced full brightness</li>
+    </ul>
+  </div>
 
-<iframe
-src="https://wokwi.com/projects/457584096420955137"
-width="100%"
-height="400">
-</iframe>
+  <div class="content-block">
+    <h2>Wokwi Simulation</h2>
+    <div class="sim-wrapper">
+      <iframe src="https://wokwi.com/projects/457584096420955137" loading="lazy"></iframe>
+    </div>
+  </div>
 
-<h2>Code</h2>
+  <div class="content-block">
+    <h2>Code</h2>
+    <pre>
+const int LDR_PIN  = A0;
+const int POT_PIN  = A1;
+const int BTN_PIN  = 2;
+const int LED_PINS[6] = {3, 5, 6, 9, 10, 11};
 
-<pre>
-int pot = A0;
-int led = 9;
+const int BRIGHTNESS_OFF  = 0;
+const int BRIGHTNESS_DIM  = 70;
+const int BRIGHTNESS_FULL = 255;
 
-void setup(){
- pinMode(led, OUTPUT);
+int  currentMode    = -1;
+bool overrideActive = false;
+unsigned long lastPress = 0;
+
+void fadeTo(int target) {
+  bool goingUp = target > currentBrightness[0];
+  while (currentBrightness[0] != target) {
+    for (int i = 0; i < 6; i++) {
+      currentBrightness[i] += goingUp ? 3 : -3;
+      currentBrightness[i] = constrain(currentBrightness[i], 0, 255);
+      analogWrite(LED_PINS[i], currentBrightness[i]);
+    }
+    delay(8);
+  }
 }
 
-void loop(){
+void loop() {
+  int rawLDR  = analogRead(LDR_PIN);
+  int potVal  = analogRead(POT_PIN);
+  int ldrLight = 1023 - rawLDR;
+  int threshold = map(potVal, 0, 1023, 200, 800);
 
- int value = analogRead(pot);
- int brightness = map(value,0,1023,0,255);
+  if (digitalRead(BTN_PIN) == LOW && millis() - lastPress > 300) {
+    overrideActive = !overrideActive;
+    lastPress = millis();
+  }
 
- analogWrite(led, brightness);
+  int newMode;
+  if (overrideActive)             newMode = 3;
+  else if (ldrLight > threshold + 60) newMode = 0;
+  else if (ldrLight > threshold - 60) newMode = 1;
+  else                                newMode = 2;
 
+  if (newMode != currentMode) {
+    // fade to appropriate brightness
+    currentMode = newMode;
+  }
+  delay(400);
 }
-</pre>
+    </pre>
+  </div>
 
-<h2>Explanation</h2>
-<p>The potentiometer provides an analog input. The Arduino reads the value and adjusts LED brightness using PWM.</p>
+  <div class="content-block">
+    <h2>How It Works</h2>
+    <p>The LDR forms a voltage divider — as it gets darker, the analog reading drops. The Arduino compares this to the threshold set by the potentiometer. A 120-unit hysteresis band prevents flickering at the threshold boundary. The override button toggles forced-on mode, simulating a manual switch found on real street light poles.</p>
+  </div>
 
-</section>
+</div>
 
+<script src="../script.js"></script>
 </body>
 </html>

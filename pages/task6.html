@@ -1,72 +1,77 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task 6 – Servo Motor Control</title>
-<link rel="stylesheet" href="../styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 6 – Smart Waste Bin | Nickson Mugerwa</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<nav class="main-nav">
-<h2 class="logo">Robotics Portfolio</h2>
+<canvas id="particles"></canvas>
 
-<ul class="nav-menu">
-<li><a href="../index.html">Home</a></li>
-</ul>
-
+<nav class="page-nav">
+  <span class="nav-logo">NM<span class="dot">.</span></span>
+  <a href="../index.html" class="back-link">← Back to Portfolio</a>
 </nav>
 
-<section>
+<div class="page-hero">
+  <div class="page-tag">Task 06 · Environmental Sensor</div>
+  <h1>Smart Waste Bin<br>Detection</h1>
+  <p>Dual ultrasonic sensors track two bins — servo auto-opens the lid on hand detection with IR sensor.</p>
+</div>
 
-<h1>Task 6 – Servo Motor Control</h1>
+<div class="page-body">
 
-<h2>Objective</h2>
-<p>Control the position of a servo motor using Arduino.</p>
+  <div class="content-block">
+    <h2>Objective</h2>
+    <p>Build a smart waste bin monitoring system with automatic lid control. Two ultrasonic sensors independently measure the fill level of two bins. An IR sensor detects approaching hands and triggers the servo to open the lid automatically. The system alerts when bins are full and plays a melody when both need emptying.</p>
+  </div>
 
-<h2>Circuit Design</h2>
-<img src="../images/task6-circuit.png" width="400">
+  <div class="content-block">
+    <h2>Components Used</h2>
+    <ul>
+      <li>Arduino Uno</li>
+      <li>2 × HC-SR04 Ultrasonic Sensors (Bin A + Bin B)</li>
+      <li>SG90 Servo Motor (automatic lid)</li>
+      <li>IR Receiver (hand detection)</li>
+      <li>Piezo Buzzer</li>
+      <li>16×2 LCD with I2C</li>
+      <li>2 × Green LEDs, 2 × Yellow, 1 × Orange, 1 × Red</li>
+      <li>Reset Push Button</li>
+      <li>6 × 220Ω Resistors</li>
+      <li>Breadboard + Jumper Wires</li>
+    </ul>
+  </div>
 
-<h2>Wokwi Simulation</h2>
+  <div class="content-block">
+    <h2>Key Features</h2>
+    <ul>
+      <li>Dual bin tracking — Bin A and Bin B monitored independently</li>
+      <li>Servo auto-opens on hand wave (IR) or close object detection</li>
+      <li>Auto-close after 3 seconds</li>
+      <li>6-LED bar graph shows average fill level</li>
+      <li>LCD alternates between bar graph and status view</li>
+      <li>Compaction melody when both bins exceed 80%</li>
+      <li>Reset button simulates both bins being emptied</li>
+    </ul>
+  </div>
 
-<iframe
-src="https://wokwi.com/projects/458995800250185729"
-width="100%"
-height="400">
-</iframe>
+  <div class="content-block">
+    <h2>Wokwi Simulation</h2>
+    <div class="sim-wrapper">
+      <iframe src="https://wokwi.com/projects/458995665993626625" loading="lazy"></iframe>
+    </div>
+  </div>
 
-<h2>Code</h2>
+  <div class="content-block">
+    <h2>How It Works</h2>
+    <p>Each ultrasonic sensor measures the distance from the top of the bin to the trash surface. A closer reading means the bin is fuller. The fill percentage is calculated as: fill% = ((BIN_DEPTH - dist) / BIN_DEPTH) × 100. When a hand wave is detected by the IR sensor or an object is within 8cm of Sensor A, the servo sweeps to 90° to open the lid, then auto-closes after 3 seconds. The Serial Monitor logs every event with a millisecond timestamp.</p>
+  </div>
 
-<pre>
-#include <Servo.h>
+</div>
 
-Servo myServo;
-
-void setup(){
- myServo.attach(9);
-}
-
-void loop(){
-
- myServo.write(0);
- delay(1000);
-
- myServo.write(90);
- delay(1000);
-
- myServo.write(180);
- delay(1000);
-
-}
-</pre>
-
-<h2>Explanation</h2>
-<p>The servo motor rotates to specific angles based on commands sent from the Arduino.</p>
-
-</section>
-
+<script src="../script.js"></script>
 </body>
 </html>

@@ -1,186 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nickson Mugerwa – Robotics Portfolio</title>
-
-<link rel="stylesheet" href="styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nickson Mugerwa – Robotics Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
+<!-- Particle canvas background -->
+<canvas id="particles"></canvas>
+
+<!-- Top bar -->
 <div class="top-bar">
-<span>✉ nickson.mugerwa@outlook.com</span>
-<span class="welcome">Welcome to My Robotics Page</span>
+  <span class="top-bar-email">✉ nickson.mugerwa@outlook.com</span>
+  <span class="top-bar-badge">Spring 2026 · Robotics</span>
 </div>
 
-<nav class="main-nav">
-
-<div class="nav-left">
-<h2 class="logo">Robotics Portfolio</h2>
-</div>
-
-  <!-- Hamburger button -->
-<button class="hamburger" aria-label="Toggle menu">
-<span></span>
-<span></span>
-<span></span>
- </button>
-<ul class="nav-menu">
-<li><a href="#home">Home</a></li>
-<li><a href="#assignments">Assignments</a></li>
-<li><a href="#projects">Projects</a></li>
-<li><a href="#about">About</a></li>
-<li><a href="#contact">Contact</a></li>
-</ul>
-
+<!-- Navigation -->
+<nav class="main-nav" id="mainNav">
+  <div class="nav-left">
+    <span class="nav-logo">NM<span class="dot">.</span></span>
+  </div>
+  <ul class="nav-menu" id="navMenu">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#group-project">Group Project</a></li>
+    <li><a href="#assignments">Tasks</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<header>
-
-  <h1>Nickson Mugerwa</h1>
-  <p>Robotics Portfolio – Spring 2026</p>
-
-</header>
-
-<section id="home">
-<div class = "progress-bg">
-<h2>Welcome</h2>
-<p>This website contains my coursework and robotics projects for the semester.</p>
-
-<div class="progress-box">
-
-<h3>Semester Progress</h3>
-
-<label><input type="checkbox" class="progress" id="week1"> Task 1</label>
-<label><input type="checkbox" class="progress" id="week2"> Task 2</label>
-<label><input type="checkbox" class="progress" id="week3"> Task 3</label>
-<label><input type="checkbox" class="progress" id="week4"> Task 4</label>
-<label><input type="checkbox" class="progress" id="week5"> Task 5</label>
-<label><input type="checkbox" class="progress" id="week6"> Task 6</label>
-<label><input type="checkbox" class="progress" id="week7"> Task 7</label>
-<label><input type="checkbox" class="progress" id="week8"> Task 8</label>
-
-<p id="progressText">Progress: 0%</p>
-
-</div>
-</div>
+<!-- Hero Section -->
+<section id="hero" class="hero-section">
+  <div class="hero-content">
+    <div class="hero-tag">Robotics Portfolio</div>
+    <h1 class="hero-title">Nickson<br><span class="accent">Mugerwa</span></h1>
+    <p class="hero-subtitle">Building intelligent systems — one circuit at a time.</p>
+    <div class="hero-cta">
+      <a href="#assignments" class="btn-primary">View Tasks</a>
+      <a href="#group-project" class="btn-outline">Group Project</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="circuit-ring ring1"></div>
+    <div class="circuit-ring ring2"></div>
+    <div class="circuit-ring ring3"></div>
+    <div class="hero-chip">
+      <span class="chip-label">Arduino UNO</span>
+      <div class="chip-pins">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-<section id="assignments">
-
-<h2>Course Tasks</h2>
-
-<a href="pages/task1.html" class="assignment-card">
-<img src="images/task1.jpg" class="task-image">
-<h3>🧩 Task 1: Basic Output Control</h3>
-<p>LED indicator system</p>
-</a>
-
-<a href="pages/task2.html" class="assignment-card">
-<img src="images/task2.jpg" class="task-image">
-<h3>🧩 Task 2: Variable Control System</h3>
-<p>Brightness or speed control</p>
-</a>
-
-<a href="pages/task3.html" class="assignment-card">
-<img src="images/task3.jpg" class="task-image">
-<h3>🧩 Task 3: User Interaction</h3>
-<p>Button controlled system</p>
-</a>
-
-<a href="pages/task4.html" class="assignment-card">
-<img src="images/task4.jpg" class="task-image">
-<h3>🧩 Task 4: Alert System</h3>
-<p>Buzzer or alarm system</p>
-</a>
-
-<a href="pages/task5.html" class="assignment-card">
-<img src="images/task5.jpg" class="task-image">
-<h3>🧩 Task 5: Display System</h3>
-<p>LCD or OLED display</p>
-</a>
-
-<a href="pages/task6.html" class="assignment-card">
-<img src="images/task6.jpg" class="task-image">
-<h3>🧩 Task 6: Environmental Sensor</h3>
-<p>Light or obstacle detection</p>
-</a>
-
-<a href="pages/task7.html" class="assignment-card">
-<img src="images/task7.jpg" class="task-image">
-<h3>🧩 Task 7: Monitoring System</h3>
-<p>Temperature / humidity monitor</p>
-</a>
-
-<a href="pages/task8.html" class="assignment-card">
-<img src="images/task8.jpg" class="task-image">
-<h3>🧩 Task 8: Motion System</h3>
-<p>Servo or motor control</p>
-</a>
-
+<!-- Progress Tracker -->
+<section id="progress-section" class="progress-section">
+  <div class="progress-inner">
+    <div class="progress-header">
+      <h2>Semester Progress</h2>
+      <div class="progress-percent-display" id="progressPercent">0%</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="task-chips">
+      <label class="task-chip" data-task="1">
+        <input type="checkbox" class="progress" id="week1">
+        <span class="chip-inner"><span class="chip-num">01</span><span class="chip-name">Output Control</span></span>
+      </label>
+      <label class="task-chip" data-task="2">
+        <input type="checkbox" class="progress" id="week2">
+        <span class="chip-inner"><span class="chip-num">02</span><span class="chip-name">Variable Control</span></span>
+      </label>
+      <label class="task-chip" data-task="3">
+        <input type="checkbox" class="progress" id="week3">
+        <span class="chip-inner"><span class="chip-num">03</span><span class="chip-name">User Interaction</span></span>
+      </label>
+      <label class="task-chip" data-task="4">
+        <input type="checkbox" class="progress" id="week4">
+        <span class="chip-inner"><span class="chip-num">04</span><span class="chip-name">Alert System</span></span>
+      </label>
+      <label class="task-chip" data-task="5">
+        <input type="checkbox" class="progress" id="week5">
+        <span class="chip-inner"><span class="chip-num">05</span><span class="chip-name">Display System</span></span>
+      </label>
+      <label class="task-chip" data-task="6">
+        <input type="checkbox" class="progress" id="week6">
+        <span class="chip-inner"><span class="chip-num">06</span><span class="chip-name">Env. Sensor</span></span>
+      </label>
+      <label class="task-chip" data-task="7">
+        <input type="checkbox" class="progress" id="week7">
+        <span class="chip-inner"><span class="chip-num">07</span><span class="chip-name">Monitoring</span></span>
+      </label>
+      <label class="task-chip" data-task="8">
+        <input type="checkbox" class="progress" id="week8">
+        <span class="chip-inner"><span class="chip-num">08</span><span class="chip-name">Motion System</span></span>
+      </label>
+    </div>
+  </div>
 </section>
 
-<div class = "project-bg">
-<section id="projects">
-
-<h2>Projects</h2>
-
-<!--<div class = "project-bg">-->
-<div class="project">
-<h3>Portfolio Website</h3>
-<p>This robotics portfolio website.</p>
-<!--</div>-->
-</div>
-
-<!--<div class="project-bg">-->
-<div class="project">
-<h3>JavaScript Game</h3>
-<p>A simple guessing game.</p>
-</div>
-</div>
-
+<!-- Group Project Banner -->
+<section id="group-project" class="group-project-section">
+  <div class="gp-inner">
+    <div class="gp-badge">Team Project</div>
+    <h2 class="gp-title">Group Capstone Project</h2>
+    <p class="gp-subtitle">Working together with our team to design and build a complete integrated robotics system — combining sensors, actuators, and intelligent control logic.</p>
+    <div class="gp-cards">
+      <div class="gp-card">
+        <div class="gp-card-icon">🤖</div>
+        <h3>Project Concept</h3>
+        <p>An integrated smart environment system combining multiple sensor inputs with real-time automated responses.</p>
+      </div>
+      <div class="gp-card">
+        <div class="gp-card-icon">👥</div>
+        <h3>Team Members</h3>
+        <p>A collaborative team effort — each member contributing unique skills across hardware, software, and system design.</p>
+      </div>
+      <div class="gp-card">
+        <div class="gp-card-icon">📅</div>
+        <h3>Timeline</h3>
+        <p>Project development spans the full semester, with milestone reviews and a final demonstration presentation.</p>
+      </div>
+      <div class="gp-card">
+        <div class="gp-card-icon">🔧</div>
+        <h3>Technologies</h3>
+        <p>Arduino, multiple sensors, servo motors, LCD display, wireless communication, and custom firmware.</p>
+      </div>
+    </div>
+    <div class="gp-status">
+      <span class="status-dot"></span>
+      <span>Project in progress — updates coming soon</span>
+    </div>
+  </div>
 </section>
 
+<!-- Assignments Section -->
+<section id="assignments" class="assignments-section">
+  <div class="section-header">
+    <div class="section-tag">Coursework</div>
+    <h2>Course Tasks</h2>
+    <p>Eight progressive Arduino projects building from basic output to complex integrated systems.</p>
+  </div>
 
-<section id="about">
-<h2>About Me</h2>
-<p>Hello! My name is Nickson. This site documents my robotics learning journey.</p>
+  <div class="tasks-grid">
+
+    <a href="pages/task1.html" class="task-card" data-num="01">
+      <div class="task-card-bg" style="--bg: url('../images/task1.jpg')"></div>
+      <div class="task-card-content">
+        <span class="task-num">01</span>
+        <h3>Basic Output Control</h3>
+        <p>LED indicator system — Smart Parking</p>
+        <span class="task-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="pages/task2.html" class="task-card" data-num="02">
+      <div class="task-card-bg" style="--bg: url('../images/task2.jpg')"></div>
+      <div class="task-card-content">
+        <span class="task-num">02</span>
+        <h3>Variable Control</h3>
+        <p>Smart street light brightness system</p>
+        <span class="task-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="pages/task3.html" class="task-card" data-num="03">
+      <div class="task-card-bg" style="--bg: url('../images/task3.jpg')"></div>
+      <div class="task-card-content">
+        <span class="task-num">03</span>
+        <h3>User Interaction</h3>
+        <p>Smart room control panel</p>
+        <span class="task-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="pages/task4.html" class="task-card" data-num="04">
+      <div class="task-card-bg" style="--bg: url('../images/task4.jpg')"></div>
+      <div class="task-card-content">
+        <span class="task-num">04</span>
+        <h3>Alert System</h3>
+        <p>Car reverse parking alert</p>
+        <span class="task-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="pages/task5.html" class="task-card" data-num="05">
+      <div class="task-card-bg" style="--bg: url('../images/task5.jpg')"></div>
+      <div class="task-card-content">
+        <span class="task-num">05</span>
+        <h3>Display System</h3>
+        <p>Smart energy monitor with LCD</p>
+        <span class="task-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="pages/task6.html" class="task-card" data-num="06">
+      <div class="task-card-bg" style="--bg: url('../images/task6.jpg')"></div>
+      <div class="task-card-content">
+        <span class="task-num">06</span>
+        <h3>Environmental Sensor</h3>
+        <p>Smart waste bin detection</p>
+        <span class="task-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="pages/task7.html" class="task-card" data-num="07">
+      <div class="task-card-bg" style="--bg: url('../images/task7.jpg')"></div>
+      <div class="task-card-content">
+        <span class="task-num">07</span>
+        <h3>Monitoring System</h3>
+        <p>Smart patient monitoring</p>
+        <span class="task-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="pages/task8.html" class="task-card" data-num="08">
+      <div class="task-card-bg" style="--bg: url('../images/task8.jpg')"></div>
+      <div class="task-card-content">
+        <span class="task-num">08</span>
+        <h3>Motion System</h3>
+        <p>Automatic door system</p>
+        <span class="task-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
 </section>
 
-<div class = "project-bg">
-<section id="contact">
-<h2>Contact</h2>
-<div class="contact-bg">
-<p>Email: nickson.mugerwa@outlook.com</p>
-<p>GitHub: github.com/student</p>
-</div class>
+<!-- Projects Section -->
+<section id="projects" class="projects-section">
+  <div class="section-header">
+    <div class="section-tag">Built Work</div>
+    <h2>Projects</h2>
+    <p>Personal and coursework projects developed throughout the semester.</p>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card featured">
+      <div class="project-card-top">
+        <span class="project-badge">Live</span>
+        <span class="project-tech">HTML · CSS · JS</span>
+      </div>
+      <h3>Portfolio Website</h3>
+      <p>This very robotics portfolio — designed and built to document and present all coursework in a clean, professional format.</p>
+      <div class="project-links">
+        <span class="project-link-tag">You are here</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-card-top">
+        <span class="project-badge">Game</span>
+        <span class="project-tech">JavaScript</span>
+      </div>
+      <h3>JavaScript Guessing Game</h3>
+      <p>A browser-based number guessing game with difficulty levels, score tracking, and animated feedback.</p>
+    </div>
+    <div class="project-card coming">
+      <div class="project-card-top">
+        <span class="project-badge upcoming">Soon</span>
+        <span class="project-tech">Arduino · C++</span>
+      </div>
+      <h3>Group Capstone</h3>
+      <p>Integrated smart environment system — team project currently in development.</p>
+    </div>
+  </div>
 </section>
-</div>
 
+<!-- About Section -->
+<section id="about" class="about-section">
+  <div class="about-inner">
+    <div class="about-left">
+      <div class="section-tag">Who I Am</div>
+      <h2>About Me</h2>
+      <p>Hello! My name is Nickson Mugerwa. This portfolio documents my robotics learning journey through Spring 2026 — from basic LED circuits all the way to complex multi-sensor automated systems.</p>
+      <p>Each task built on the last, developing skills in embedded programming, circuit design, sensor integration, and real-world system thinking.</p>
+      <div class="skills-row">
+        <span class="skill-tag">Arduino</span>
+        <span class="skill-tag">C++</span>
+        <span class="skill-tag">Circuit Design</span>
+        <span class="skill-tag">Wokwi</span>
+        <span class="skill-tag">Sensors</span>
+        <span class="skill-tag">Servo Control</span>
+        <span class="skill-tag">LCD / I2C</span>
+        <span class="skill-tag">PWM</span>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="stat-box">
+        <div class="stat">
+          <span class="stat-num" data-target="8">0</span>
+          <span class="stat-label">Tasks Completed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-target="20">0</span>
+          <span class="stat-label">+ Components Used</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-target="500">0</span>
+          <span class="stat-label">+ Lines of Code</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-target="1">0</span>
+          <span class="stat-label">Semester</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<footer>
-<p>© 2026 Nickson Mugerwa Robotics Portfolio</p>
+<!-- Contact Section -->
+<section id="contact" class="contact-section">
+  <div class="section-header">
+    <div class="section-tag">Get In Touch</div>
+    <h2>Contact</h2>
+  </div>
+  <div class="contact-cards">
+    <a href="mailto:nickson.mugerwa@outlook.com" class="contact-card">
+      <div class="contact-icon">✉</div>
+      <div class="contact-info">
+        <span class="contact-label">Email</span>
+        <span class="contact-value">nickson.mugerwa@outlook.com</span>
+      </div>
+    </a>
+    <a href="https://github.com/student" target="_blank" class="contact-card">
+      <div class="contact-icon">⌥</div>
+      <div class="contact-info">
+        <span class="contact-label">GitHub</span>
+        <span class="contact-value">github.com/student</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="main-footer">
+  <div class="footer-inner">
+    <span class="footer-logo">NM<span class="dot">.</span></span>
+    <span class="footer-copy">© 2026 Nickson Mugerwa · Robotics Portfolio</span>
+    <span class="footer-right">Spring 2026</span>
+  </div>
 </footer>
 
 <script src="script.js"></script>
-
-<!--Script for the header-->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const slidesContainer = document.querySelector('.slides');
-  const totalSlides = document.querySelectorAll('.slide').length;
-  let index = 0;
-
-  setInterval(() => {
-    index = (index + 1) % totalSlides;
-    slidesContainer.style.transform = `translateX(-${index * 100}%)`;
-  }, 10000);
-});
-</script>
 </body>
 </html>

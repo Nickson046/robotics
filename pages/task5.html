@@ -1,124 +1,122 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task 5 – Motor Control</title>
-<link rel="stylesheet" href="../styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 5 – Smart Energy Monitor | Nickson Mugerwa</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<nav class="main-nav">
-<h2 class="logo">Robotics Portfolio</h2>
+<canvas id="particles"></canvas>
 
-<ul class="nav-menu">
-<li><a href="../index.html">Home</a></li>
-</ul>
-
+<nav class="page-nav">
+  <span class="nav-logo">NM<span class="dot">.</span></span>
+  <a href="../index.html" class="back-link">← Back to Portfolio</a>
 </nav>
 
-<section>
+<div class="page-hero">
+  <div class="page-tag">Task 05 · Display System</div>
+  <h1>Smart Energy<br>Monitor</h1>
+  <p>Dual potentiometers simulate current and voltage — LCD shows watts, cost/hr, peak load, and status.</p>
+</div>
 
-<h1>Task 5 – Motor Control</h1>
+<div class="page-body">
 
-<h2>Objective</h2>
-<p>Control the speed of a DC motor using PWM.</p>
+  <div class="content-block">
+    <h2>Objective</h2>
+    <p>Design a smart electricity meter display that calculates and shows real-time power consumption. Two potentiometers simulate a current sensor and voltage fluctuation. The system displays power in watts, estimated cost per hour, peak readings, and triggers alarms at critical consumption levels.</p>
+  </div>
 
-<h2>Circuit Design</h2>
-<img src="../images/task5-circuit.png" width="400">
+  <div class="content-block">
+    <h2>Components Used</h2>
+    <ul>
+      <li>Arduino Uno</li>
+      <li>2 × Potentiometers (current + voltage simulation)</li>
+      <li>16×2 LCD with I2C</li>
+      <li>Piezo Buzzer</li>
+      <li>2 × Green LEDs, 1 × Yellow, 1 × Orange, 1 × Red</li>
+      <li>5 × 220Ω Resistors</li>
+      <li>Breadboard + Jumper Wires</li>
+    </ul>
+  </div>
 
-<h2>Wokwi Simulation</h2>
+  <div class="content-block">
+    <h2>Consumption Zones</h2>
+    <ul>
+      <li>0–1000W — NORMAL: green LEDs, silent</li>
+      <li>1000–2000W — HIGH: yellow LED, warning beep</li>
+      <li>2000–3500W — VERY HIGH: orange LED, slow alarm</li>
+      <li>3500W+ — CRITICAL: red LED, solid alarm, LCD alert</li>
+    </ul>
+  </div>
 
-<iframe
-src="https://wokwi.com/projects/458995665993626625"
-width="100%"
-height="400">
-</iframe>
+  <div class="content-block">
+    <h2>Wokwi Simulation</h2>
+    <div class="sim-wrapper">
+      <iframe src="https://wokwi.com/projects/458995665993626625" loading="lazy"></iframe>
+    </div>
+  </div>
 
-<h2>Code</h2>
+  <div class="content-block">
+    <h2>Code</h2>
+    <pre>
+#include &lt;Wire.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
 
-<pre>
-int led1 = 9;
-int led2 = 10;
-int led3 = 11;
-int button = 2;
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-int speedLevel = 0;
-bool lastState = HIGH;
+const int POT_CURRENT = A0, POT_VOLTAGE = A1;
+const int LED_PINS[5] = {3, 4, 5, 6, 7};
+const int BUZZER_PIN  = 8;
 
-void setup() {
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
-  pinMode(led3, OUTPUT);
-  pinMode(button, INPUT_PULLUP);
-}
+const float COST_PER_KWH = 0.15;
+const float MAX_POWER    = 4800.0;
+
+float peakWatts = 0;
 
 void loop() {
-  bool currentState = digitalRead(button);
+  int rawI = analogRead(POT_CURRENT);
+  int rawV = analogRead(POT_VOLTAGE);
 
-  if (lastState == HIGH && currentState == LOW) {
-    speedLevel++;
-    if (speedLevel > 3) speedLevel = 0;
-    delay(200);
+  float current = map(rawI, 0, 1023, 0, 2000) / 100.0;
+  float voltage = map(rawV, 0, 1023, 2100, 2400) / 10.0;
+  float watts   = current * voltage;
+  float cost    = (watts / 1000.0) * COST_PER_KWH;
+
+  if (watts > peakWatts) peakWatts = watts;
+
+  int ledsOn = constrain((int)((watts / MAX_POWER) * 5.0), 0, 5);
+  for (int i = 0; i &lt; 5; i++) {
+    digitalWrite(LED_PINS[i], i &lt; ledsOn ? HIGH : LOW);
   }
 
-  lastState = currentState;
+  // Update LCD every 500ms
+  lcd.setCursor(0, 0);
+  lcd.print((int)watts);
+  lcd.print("W $");
+  lcd.print(cost, 2);
+  lcd.print("/h    ");
 
-  digitalWrite(led1, LOW);
-  digitalWrite(led2, LOW);
-  digitalWrite(led3, LOW);
+  lcd.setCursor(0, 1);
+  if (watts &gt; 3500) lcd.print("CRITICAL!       ");
+  else if (watts &gt; 2000) lcd.print("VERY HIGH       ");
+  else if (watts &gt; 1000) lcd.print("HIGH            ");
+  else lcd.print("NORMAL          ");
 
-  if (speedLevel == 1) digitalWrite(led1, HIGH);
-
-  if (speedLevel == 2) {
-    digitalWrite(led1, HIGH);
-    digitalWrite(led2, HIGH);
-  }
-
-  if (speedLevel == 3) {
-    digitalWrite(led1, HIGH);
-    digitalWrite(led2, HIGH);
-    digitalWrite(led3, HIGH);
-  }
+  delay(500);
 }
-</pre>
+    </pre>
+  </div>
 
-<h2>Explanation</h2>
+  <div class="content-block">
+    <h2>How It Works</h2>
+    <p>POT1 maps to 0–20A (current) and POT2 maps to 210–240V. Power (watts) = current × voltage. Cost per hour = (watts ÷ 1000) × £0.15. The LCD alternates every 3 seconds between showing the power/cost view and a voltage/current/total-kWh view. The serial monitor prints a full formatted dashboard table every 2 seconds.</p>
+  </div>
 
-<p>
-In this task, a DC motor is simulated using three LEDs in the Wokwi environment.
-Since a real DC motor is not available, LEDs are used to visually represent
-different motor speed levels.
-</p>
+</div>
 
-<p>
-A pushbutton connected to pin 2 is used to change the speed level. Each time
-the button is pressed, the system cycles through four states:
-OFF, slow, medium, and high speed.
-</p>
-
-<p>
-Instead of using actual motor rotation, the LEDs indicate speed as follows:
-</p>
-
-<ul>
-<li>0 LEDs ON → Motor OFF</li>
-<li>1 LED ON → Low speed</li>
-<li>2 LEDs ON → Medium speed</li>
-<li>3 LEDs ON → High speed</li>
-</ul>
-
-<p>
-This demonstrates how motor speed can be controlled using different output levels.
-In real applications, this would be done using PWM signals with analogWrite(),
-but in this simulation, multiple LEDs are used to clearly visualize the changes.
-</p>
-
-</section>
-
+<script src="../script.js"></script>
 </body>
-
 </html>

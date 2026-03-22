@@ -1,71 +1,148 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task 8 – Final Integrated System</title>
-<link rel="stylesheet" href="../styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 8 – Automatic Door System | Nickson Mugerwa</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<nav class="main-nav">
-<h2 class="logo">Robotics Portfolio</h2>
+<canvas id="particles"></canvas>
 
-<ul class="nav-menu">
-<li><a href="../index.html">Home</a></li>
-</ul>
-
+<nav class="page-nav">
+  <span class="nav-logo">NM<span class="dot">.</span></span>
+  <a href="../index.html" class="back-link">← Back to Portfolio</a>
 </nav>
 
-<section>
+<div class="page-hero">
+  <div class="page-tag">Task 08 · Motion System — Final Project</div>
+  <h1>Automatic Door<br>System</h1>
+  <p>PIR + ultrasonic sensors, dual servos, 3 operating modes, visitor counter, intruder alert, and LCD event log.</p>
+</div>
 
-<h1>Task 8 – Final Integrated System</h1>
+<div class="page-body">
 
-<h2>Objective</h2>
-<p>Combine sensors and outputs to build a simple automated system.</p>
+  <div class="content-block">
+    <h2>Objective</h2>
+    <p>Build a fully-featured automatic door system as the final and most complex project of the semester. The system combines proximity sensing, motion detection, dual servo control, and three operating modes to simulate the automatic doors used in shopping malls, hospitals, and airports.</p>
+  </div>
 
-<h2>Circuit Design</h2>
-<img src="../images/task8-circuit.png" width="400">
+  <div class="content-block">
+    <h2>Components Used</h2>
+    <ul>
+      <li>Arduino Uno</li>
+      <li>HC-SR04 Ultrasonic Sensor (proximity zones)</li>
+      <li>PIR Motion Sensor (standby wake)</li>
+      <li>2 × SG90 Servo Motors (main door + inner gate)</li>
+      <li>Piezo Buzzer (entry chime + alerts)</li>
+      <li>16×2 LCD with I2C</li>
+      <li>Blue, Yellow, Green, Red LEDs (status indicators)</li>
+      <li>Mode button + Manual open button</li>
+      <li>4 × 220Ω Resistors</li>
+      <li>Breadboard + Jumper Wires</li>
+    </ul>
+  </div>
 
-<h2>Wokwi Simulation</h2>
+  <div class="content-block">
+    <h2>Distance Zones</h2>
+    <ul>
+      <li>> 150cm — Standby: blue LED, PIR watching for motion</li>
+      <li>80–150cm — Approaching: yellow LED, system wakes</li>
+      <li>20–80cm — Open zone: both servos open, green LED, entry chime</li>
+      <li>< 20cm — Too close: red flash, warning beep</li>
+    </ul>
+  </div>
 
-<iframe
-src="https://wokwi.com/projects/458995800250185729"
-width="100%"
-height="400">
-</iframe>
+  <div class="content-block">
+    <h2>Operating Modes</h2>
+    <ul>
+      <li>AUTO — door opens and closes automatically based on sensor readings</li>
+      <li>MANUAL — door only opens when the manual button is pressed</li>
+      <li>LOCKED — door refuses to open; manual button plays rejected beep</li>
+    </ul>
+  </div>
 
-<h2>Code</h2>
+  <div class="content-block">
+    <h2>Advanced Features</h2>
+    <ul>
+      <li>Visitor counter — increments each time someone passes through</li>
+      <li>Intruder alert — triggers if door is blocked open for more than 8 seconds</li>
+      <li>Startup self-test — servos sweep and buzzer chimes on boot</li>
+      <li>LCD 3-page rotation — door status / visitor count / event log</li>
+      <li>Serial event log with millisecond timestamps</li>
+    </ul>
+  </div>
 
-<pre>
-int sensor = A0;
-int led = 13;
+  <div class="content-block">
+    <h2>Wokwi Simulation</h2>
+    <div class="sim-wrapper">
+      <iframe src="https://wokwi.com/projects/458995665993626625" loading="lazy"></iframe>
+    </div>
+  </div>
 
-void setup(){
- pinMode(led, OUTPUT);
+  <div class="content-block">
+    <h2>Code (state machine core)</h2>
+    <pre>
+void loop() {
+  long dist = getDistance();
+  bool pirMotion = digitalRead(PIR_PIN);
+
+  // Mode cycling via button
+  if (modeButtonPressed()) {
+    mode = (mode + 1) % 3;
+    if (mode == MODE_LOCKED) { closeDoor(); closeGate(); }
+  }
+
+  if (mode == MODE_LOCKED) {
+    setLED(LED_RED);
+    playLockedBeep(now);
+    return;
+  }
+
+  // Wake system on PIR motion
+  if (pirMotion && !systemAwake) {
+    systemAwake = true;
+    logEvent("PIR motion detected");
+  }
+
+  // Intruder check: door open too long
+  if (doorOpen && now - doorOpenTime &gt; 8000) {
+    intruderAlert = true;
+    logEvent("INTRUDER ALERT");
+  }
+
+  // AUTO mode distance zones
+  if (mode == MODE_AUTO) {
+    if (dist &lt; ZONE_OPEN) {
+      setLED(LED_GREEN);
+      openDoor(); openGate();
+      if (!personCounted) {
+        visitorCount++;
+        personCounted = true;
+      }
+    } else if (dist &lt; ZONE_APPROACH) {
+      setLED(LED_YELLOW);
+      if (doorOpen) { closeDoor(); closeGate(); }
+    } else {
+      setLED(LED_BLUE);
+      if (doorOpen && now - doorOpenTime &gt; 3000) {
+        closeDoor(); closeGate();
+      }
+    }
+  }
 }
+    </pre>
+  </div>
 
-void loop(){
+  <div class="content-block">
+    <h2>How to Test</h2>
+    <p>On startup both servos do a self-test sweep and 3 ascending beeps play. Drag the HC-SR04 slider slowly left — at 80cm the yellow LED activates (approaching), at 30cm both servos open with a chime (green LED), visitor count increments. Leave the slider close for 8 seconds to trigger the intruder alarm. Press the blue mode button to cycle AUTO → MANUAL → LOCKED and observe how the system behaves differently in each mode.</p>
+  </div>
 
- int value = analogRead(sensor);
+</div>
 
- if(value > 600){
-   digitalWrite(led, HIGH);
- }
- else{
-   digitalWrite(led, LOW);
- }
-
-}
-</pre>
-
-<h2>Explanation</h2>
-<p>This final task combines sensor input with automated output control.</p>
-
-</section>
-
+<script src="../script.js"></script>
 </body>
 </html>

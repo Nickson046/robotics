@@ -1,70 +1,130 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task 3 – User Interaction</title>
-<link rel="stylesheet" href="../styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 3 – Smart Room Control Panel | Nickson Mugerwa</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<nav class="main-nav">
-<h2 class="logo">Robotics Portfolio</h2>
+<canvas id="particles"></canvas>
 
-<ul class="nav-menu">
-<li><a href="../index.html">Home</a></li>
-</ul>
-
+<nav class="page-nav">
+  <span class="nav-logo">NM<span class="dot">.</span></span>
+  <a href="../index.html" class="back-link">← Back to Portfolio</a>
 </nav>
 
-<section>
+<div class="page-hero">
+  <div class="page-tag">Task 03 · User Interaction</div>
+  <h1>Smart Room<br>Control Panel</h1>
+  <p>3 buttons control light, fan, and alarm — with toggle, hold, and double-tap gestures.</p>
+</div>
 
-<h1>Task 3 – User Interaction</h1>
+<div class="page-body">
 
-<h2>Objective</h2>
-<p>Create a system where a push button controls an LED.</p>
+  <div class="content-block">
+    <h2>Objective</h2>
+    <p>Build a smart room control panel using push buttons to control three room devices — light, fan, and alarm. The system uses button gestures (tap, hold, double-tap) to unlock different functions, simulating a real home automation wall panel.</p>
+  </div>
 
-<h2>Circuit Design</h2>
-<img src="../images/task3-circuit.png" width="400">
+  <div class="content-block">
+    <h2>Components Used</h2>
+    <ul>
+      <li>Arduino Uno</li>
+      <li>3 × Push Buttons (blue, green, red)</li>
+      <li>3 × LEDs (yellow, green, red)</li>
+      <li>3 × 220Ω Resistors</li>
+      <li>Breadboard + Jumper Wires</li>
+    </ul>
+  </div>
 
-<h2>Wokwi Simulation</h2>
+  <div class="content-block">
+    <h2>Button Functions</h2>
+    <ul>
+      <li>Blue button — tap to toggle light on/off</li>
+      <li>Green button — tap to toggle fan / hold 2s to cycle fan speed (low → med → high)</li>
+      <li>Red button — tap to toggle alarm / double-tap triggers 6-flash emergency sequence</li>
+    </ul>
+  </div>
 
-<iframe
-src="https://wokwi.com/projects/457584714314414081"
-width="100%"
-height="400">
-</iframe>
+  <div class="content-block">
+    <h2>Wokwi Simulation</h2>
+    <div class="sim-wrapper">
+      <iframe src="https://wokwi.com/projects/457584714314414081" loading="lazy"></iframe>
+    </div>
+  </div>
 
-<h2>Code</h2>
+  <div class="content-block">
+    <h2>Code</h2>
+    <pre>
+const int BTN_LIGHT = 2, BTN_FAN = 3, BTN_ALARM = 4;
+const int LED_LIGHT = 9, LED_FAN = 10, LED_ALARM = 11;
 
-<pre>
-int button = 2;
-int led = 13;
+bool lightOn = false, fanOn = false, alarmOn = false;
+int  fanSpeed = 0;
+const int FAN_SPEEDS[4] = {0, 80, 160, 255};
 
-void setup(){
- pinMode(button, INPUT);
- pinMode(led, OUTPUT);
+void loop() {
+  // Light: simple toggle
+  if (digitalRead(BTN_LIGHT) == LOW) {
+    lightOn = !lightOn;
+    analogWrite(LED_LIGHT, lightOn ? 255 : 0);
+    delay(40);
+  }
+
+  // Fan: tap = toggle, hold 2s = cycle speed
+  if (digitalRead(BTN_FAN) == LOW) {
+    unsigned long held = 0;
+    while (digitalRead(BTN_FAN) == LOW) {
+      held++;
+      delay(1);
+    }
+    if (held >= 2000) {
+      fanSpeed = (fanSpeed + 1) % 4;
+      fanOn = (fanSpeed != 0);
+    } else {
+      fanOn = !fanOn;
+      if (!fanOn) fanSpeed = 0;
+      else if (fanSpeed == 0) fanSpeed = 2;
+    }
+    analogWrite(LED_FAN, FAN_SPEEDS[fanSpeed]);
+  }
+
+  // Alarm: single = toggle, double-tap = flash
+  if (digitalRead(BTN_ALARM) == LOW) {
+    unsigned long gap = millis() - lastAlarmTap;
+    if (gap < 400) {
+      // Double tap - flash all LEDs
+      for (int i = 0; i < 6; i++) {
+        analogWrite(LED_LIGHT, 255);
+        analogWrite(LED_FAN, 255);
+        analogWrite(LED_ALARM, 255);
+        delay(120);
+        analogWrite(LED_LIGHT, 0);
+        analogWrite(LED_FAN, 0);
+        analogWrite(LED_ALARM, 0);
+        delay(120);
+      }
+    } else {
+      alarmOn = !alarmOn;
+      analogWrite(LED_ALARM, alarmOn ? 255 : 0);
+    }
+    lastAlarmTap = millis();
+  }
+  delay(20);
 }
+    </pre>
+  </div>
 
-void loop(){
+  <div class="content-block">
+    <h2>How It Works</h2>
+    <p>Each button uses INPUT_PULLUP — reading LOW when pressed. The fan button measures how long it is held to decide between a quick tap and a hold gesture. The alarm button tracks the time since the last press to detect a double-tap within 400ms. All LEDs use PWM-capable pins so fan speed can be shown as actual brightness dimming.</p>
+  </div>
 
- if(digitalRead(button) == HIGH){
-   digitalWrite(led, HIGH);
- }
- else{
-   digitalWrite(led, LOW);
- }
+</div>
 
-}
-</pre>
-
-<h2>Explanation</h2>
-<p>The button acts as a digital input. When pressed, the Arduino receives a HIGH signal and turns on the LED.</p>
-
-</section>
-
+<script src="../script.js"></script>
 </body>
 </html>
