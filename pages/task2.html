@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task 2 – Smart Street Light | Nickson Mugerwa</title>
+  <title>Task 2 – Car Dashboard Speedometer | Nickson Mugerwa</title>
   <link rel="stylesheet" href="../styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 </head>
@@ -18,37 +18,48 @@
 
 <div class="page-hero">
   <div class="page-tag">Task 02 · Variable Control System</div>
-  <h1>Smart Street Light<br>Brightness Control</h1>
-  <p>Street lights automatically adjust brightness based on ambient light detected by an LDR sensor.</p>
+  <h1>Car Dashboard<br>Speedometer</h1>
+  <p>A potentiometer acts as an accelerator pedal — speed increases gradually with auto gear shifting, LED bar graph, speed limit warnings, and a live ECU-style dashboard.</p>
 </div>
 
 <div class="page-body">
 
   <div class="content-block">
     <h2>Objective</h2>
-    <p>Create a smart street lighting system that automatically adjusts LED brightness based on the environment's light level. A potentiometer allows threshold adjustment, and an override button forces lights on regardless of the sensor reading — simulating real-world smart city lighting.</p>
+    <p>Design a variable control system where the output changes gradually and dynamically based on an analog input. A potentiometer simulates an accelerator pedal, controlling a virtual speed from 0 to 200 km/h. The system responds with automatic gear changes, a progressive LED bar graph, speed limit alerts, and a real-time LCD dashboard — mirroring how a real car instrument cluster behaves.</p>
+  </div>
+
+  <div class="content-block">
+    <h2>Real-Life Application</h2>
+    <p>Every modern vehicle has an electronic control unit (ECU) that reads the accelerator pedal position and controls engine output, gear selection, instrument displays, and warning lights. This project simulates exactly that — the pot is the pedal, the Arduino is the ECU, and the LEDs and LCD are the instrument cluster. The speed limit warning system mirrors the over-speed alerts found in modern cars and commercial vehicle fleet management systems.</p>
   </div>
 
   <div class="content-block">
     <h2>Components Used</h2>
     <ul>
       <li>Arduino Uno</li>
-      <li>Photoresistor (LDR)</li>
-      <li>Potentiometer — threshold adjustment</li>
-      <li>Push button — manual override</li>
-      <li>6 × Yellow LEDs (street lights)</li>
-      <li>6 × 220Ω Resistors + 10kΩ pull-down</li>
+      <li>Potentiometer 1 — accelerator pedal (A0)</li>
+      <li>Potentiometer 2 — adjustable speed limit (A1)</li>
+      <li>16×2 LCD Display with I2C module</li>
+      <li>2 × Green LEDs — low speed indicator</li>
+      <li>2 × Yellow LEDs — medium speed indicator</li>
+      <li>2 × Red LEDs — high speed / warning indicator</li>
+      <li>6 × 220Ω Resistors</li>
+      <li>Piezo Buzzer — speed limit alarm</li>
       <li>Breadboard + Jumper Wires</li>
     </ul>
   </div>
 
   <div class="content-block">
-    <h2>Brightness Modes</h2>
+    <h2>Speed Zones</h2>
     <ul>
-      <li>Bright environment → all LEDs OFF (energy saving)</li>
-      <li>Twilight zone → LEDs at 30% brightness (DIM mode)</li>
-      <li>Full darkness → LEDs at 100% brightness (FULL mode)</li>
-      <li>Override button pressed → forced full brightness</li>
+      <li>0–10 km/h → Gear N · 0 LEDs · Status: IDLE</li>
+      <li>10–30 km/h → Gear 1 · 1 green LED · Status: CRAWL</li>
+      <li>30–60 km/h → Gear 2 · 2 green LEDs · Status: CITY</li>
+      <li>60–90 km/h → Gear 3 · 3 LEDs · Status: ROAD</li>
+      <li>90–120 km/h → Gear 4 · 4 LEDs · Status: FAST</li>
+      <li>120–150 km/h → Gear 5 · 5 LEDs · Status: HIGHWAY</li>
+      <li>150+ km/h → Gear 6 · all LEDs flash · Status: DANGER</li>
     </ul>
   </div>
 
@@ -62,60 +73,82 @@
   <div class="content-block">
     <h2>Code</h2>
     <pre>
-const int LDR_PIN  = A0;
-const int POT_PIN  = A1;
-const int BTN_PIN  = 2;
-const int LED_PINS[6] = {3, 5, 6, 9, 10, 11};
+#include &lt;Wire.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
 
-const int BRIGHTNESS_OFF  = 0;
-const int BRIGHTNESS_DIM  = 70;
-const int BRIGHTNESS_FULL = 255;
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-int  currentMode    = -1;
-bool overrideActive = false;
-unsigned long lastPress = 0;
+const int ACCEL_PIN   = A0;   // accelerator pot
+const int LIMIT_PIN   = A1;   // speed limit pot
+const int LED_PINS[5] = {3, 4, 5, 6, 7};
+const int BUZZER_PIN  = 8;
+const int WARN_LED    = 9;
 
-void fadeTo(int target) {
-  bool goingUp = target > currentBrightness[0];
-  while (currentBrightness[0] != target) {
-    for (int i = 0; i < 6; i++) {
-      currentBrightness[i] += goingUp ? 3 : -3;
-      currentBrightness[i] = constrain(currentBrightness[i], 0, 255);
-      analogWrite(LED_PINS[i], currentBrightness[i]);
-    }
-    delay(8);
-  }
+int smoothedSpeed = 0;
+
+int getGear(int speed) {
+  if (speed < 10)  return 0;  // Neutral
+  if (speed < 30)  return 1;
+  if (speed < 55)  return 2;
+  if (speed < 85)  return 3;
+  if (speed < 115) return 4;
+  if (speed < 150) return 5;
+  return 6;
 }
 
 void loop() {
-  int rawLDR  = analogRead(LDR_PIN);
-  int potVal  = analogRead(POT_PIN);
-  int ldrLight = 1023 - rawLDR;
-  int threshold = map(potVal, 0, 1023, 200, 800);
+  int accelRaw = analogRead(ACCEL_PIN);
+  int limitRaw = analogRead(LIMIT_PIN);
 
-  if (digitalRead(BTN_PIN) == LOW && millis() - lastPress > 300) {
-    overrideActive = !overrideActive;
-    lastPress = millis();
+  // Smooth acceleration — can't jump instantly
+  int targetSpeed = map(accelRaw, 0, 1023, 0, 200);
+  if (targetSpeed > smoothedSpeed)
+    smoothedSpeed = min(smoothedSpeed + 3, targetSpeed);
+  else
+    smoothedSpeed = max(smoothedSpeed - 4, targetSpeed);
+
+  // Map pot2 to road speed limits
+  int limitOptions[9] = {20,30,40,50,60,70,80,100,120};
+  int limitIndex = map(limitRaw, 0, 1023, 0, 8);
+  int speedLimit = limitOptions[limitIndex];
+
+  bool limitBreached = (smoothedSpeed > speedLimit);
+
+  // Update LED bar graph
+  int LED_THRESH[5] = {20, 50, 80, 110, 140};
+  for (int i = 0; i &lt; 5; i++) {
+    digitalWrite(LED_PINS[i], smoothedSpeed > LED_THRESH[i] ? HIGH : LOW);
   }
 
-  int newMode;
-  if (overrideActive)             newMode = 3;
-  else if (ldrLight > threshold + 60) newMode = 0;
-  else if (ldrLight > threshold - 60) newMode = 1;
-  else                                newMode = 2;
-
-  if (newMode != currentMode) {
-    // fade to appropriate brightness
-    currentMode = newMode;
+  // Warning LED flashes when over limit
+  if (limitBreached) {
+    digitalWrite(WARN_LED, (millis()/300) % 2 == 0 ? HIGH : LOW);
+    tone(BUZZER_PIN, 1000);
+  } else {
+    digitalWrite(WARN_LED, LOW);
+    noTone(BUZZER_PIN);
   }
-  delay(400);
+
+  // LCD display
+  lcd.setCursor(0, 0);
+  lcd.print("SPD:");
+  lcd.print(smoothedSpeed);
+  lcd.print("km/h G:");
+  lcd.print(getGear(smoothedSpeed));
+
+  lcd.setCursor(0, 1);
+  lcd.print("LIM:");
+  lcd.print(speedLimit);
+  lcd.print(limitBreached ? " OVER!" : " OK   ");
+
+  delay(30);
 }
     </pre>
   </div>
 
   <div class="content-block">
     <h2>How It Works</h2>
-    <p>The LDR forms a voltage divider — as it gets darker, the analog reading drops. The Arduino compares this to the threshold set by the potentiometer. A 120-unit hysteresis band prevents flickering at the threshold boundary. The override button toggles forced-on mode, simulating a manual switch found on real street light poles.</p>
+    <p>The accelerator potentiometer feeds an analog value (0–1023) into the Arduino which maps it to a speed of 0–200 km/h. Rather than jumping instantly to the target speed, a smoothing algorithm increases or decreases the displayed speed by a few km/h each loop — this simulates the inertia of a real vehicle accelerating and braking. The second potentiometer maps to one of nine real UK road speed limits (20, 30, 40, 50, 60, 70, 80, 100, 120 km/h). As speed crosses each LED threshold, the bar graph lights up progressively. When speed exceeds the limit, the warning LED flashes, the buzzer beeps with increasing urgency, and the LCD corner shows the breach. At over 160 km/h all LEDs flash rapidly in a danger pattern. A random speed camera event also fires occasionally to simulate real road monitoring.</p>
   </div>
 
 </div>
